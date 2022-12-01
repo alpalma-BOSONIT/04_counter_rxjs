@@ -1,5 +1,15 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, interval, Observable, Subject } from 'rxjs';
+import {
+  BehaviorSubject,
+  concatMap,
+  interval,
+  map,
+  mergeMap,
+  Observable,
+  Subject,
+  takeWhile,
+  tap,
+} from 'rxjs';
 import { Config } from '../interfaces/config.interface';
 
 @Injectable({
@@ -8,6 +18,7 @@ import { Config } from '../interfaces/config.interface';
 export class CounterService {
   // Interface for config
   // BS for setting the config -> modify from external components
+
   private _configuration: BehaviorSubject<Config> = new BehaviorSubject<Config>(
     {
       count: false,
@@ -18,30 +29,37 @@ export class CounterService {
     }
   );
 
-  private _currentValue: BehaviorSubject<number> = new BehaviorSubject<number>(
-    0
-  );
+  private _counter: number = this._configuration.getValue().initialValue;
+
+  public interval$: Observable<number> = interval(
+    this._configuration.getValue().speed
+  )
+    .pipe(
+      tap(() => console.log(this._configuration.getValue().count)),
+      takeWhile(() => this._configuration.getValue().count)
+    )
+    .pipe(
+      map(() =>
+        this._configuration.getValue().countUp
+          ? (this._counter += this._configuration.getValue().steps)
+          : (this._counter -= this._configuration.getValue().steps)
+      )
+    );
 
   public configuration$: Observable<Config> =
     this._configuration.asObservable();
 
-  constructor() {}
-
-  setCurrentCount(currentValue: number): void {
-    this._currentValue.next(currentValue);
-  }
+  myInterval() {}
 
   startCount(): void {
     this._configuration.next({ ...this._configuration.value, count: true });
   }
 
   pauseCount(): void {
-    // this._configuration.next({
-    //   ...this._configuration.value,
-    //   count: false,
-    //   initialValue: this._currentValue.value,
-    // });
-    this._configuration.complete();
+    this._configuration.next({
+      ...this._configuration.getValue(),
+      count: false,
+    });
   }
 
   resetCount(): void {

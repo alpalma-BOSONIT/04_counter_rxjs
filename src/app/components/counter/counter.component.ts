@@ -1,5 +1,13 @@
 import { Component, DoCheck, OnInit } from '@angular/core';
-import { subscribeOn, Observable, interval, map, tap } from 'rxjs';
+import {
+  subscribeOn,
+  Observable,
+  interval,
+  map,
+  tap,
+  takeWhile,
+  concatMap,
+} from 'rxjs';
 import { Config } from 'src/app/interfaces/config.interface';
 import { CounterService } from '../../services/counter.service';
 
@@ -9,58 +17,21 @@ import { CounterService } from '../../services/counter.service';
   styleUrls: ['./counter.component.scss'],
 })
 export class CounterComponent implements OnInit {
-  count: number = 0;
-  initialValue: number = 0;
-  start: boolean = false;
-  speed: number = 1000;
-  steps: number = 1;
-  countUp: boolean = true;
-
-  interval = interval(this.speed)
-    .pipe(
-      map(
-        () => {
-          if (this.countUp && this.start) {
-            this.count += this.steps;
-            this.cs.setCurrentCount(this.count);
-          } else if (!this.countUp && this.start) {
-            this.count -= this.steps;
-            this.cs.setCurrentCount(this.count);
-          } else {
-            return;
-            this.count += 0;
-          }
-        }
-        // this.countUp && this.start
-        //   ? (this.count += this.steps)
-        //   : !this.countUp && this.start
-        //   ? (this.count -= this.steps)
-        //   : (this.count += 0)
-      ),
-      tap(() => console.log(this.count))
-    )
-    .subscribe();
+  counter: number = 0;
+  config?: Config;
 
   constructor(private cs: CounterService) {}
 
   ngOnInit(): void {
-    this.cs.configuration$.subscribe(
-      ({ initialValue, count, speed, steps, countUp }) => {
-        this.count = initialValue;
-        this.initialValue = initialValue;
-        this.start = count;
-        this.speed = speed;
-        this.steps = steps;
-        this.countUp = countUp;
-      }
-    );
+    this.cs.configuration$.subscribe((val) => (this.config = val));
   }
 
-  ngDoCheck(): void {
-    if (this.start) {
-      // this.interval.subscribe();
-    } else if (!this.start) {
-      this.interval.unsubscribe();
-    }
+  startCount(): void {
+    this.cs.startCount();
+    this.cs.interval$.subscribe((val) => (this.counter = val));
+  }
+
+  pauseCount(): void {
+    this.cs.pauseCount(); // Creo que no hace falta desuscribirse porque el takeWhile ya emite un complete.
   }
 }
