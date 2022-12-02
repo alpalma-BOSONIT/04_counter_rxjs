@@ -8,6 +8,7 @@ import { SetupComponent } from './components/counter-controllers/setup/setup.com
 import { CountComponent } from './components/counter-controllers/count/count.component';
 import { InputsComponent } from './components/counter-controllers/inputs/inputs.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ConfigViewComponent } from './components/config-view/config-view.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     SetupComponent,
     CountComponent,
     InputsComponent,
+    ConfigViewComponent,
   ],
   imports: [BrowserModule, ReactiveFormsModule],
   providers: [],

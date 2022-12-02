@@ -1,15 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  BehaviorSubject,
-  concatMap,
-  interval,
-  map,
-  mergeMap,
-  Observable,
-  Subject,
-  takeWhile,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, interval, map, Observable, takeWhile } from 'rxjs';
 import { Config } from '../interfaces/config.interface';
 import { Inputs } from '../interfaces/inputs.interface';
 
