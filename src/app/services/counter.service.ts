@@ -75,4 +75,12 @@ export class CounterService {
       initialValue: value,
     });
   }
+
+  setCountUp(): void {
+    this._configuration.next({ ...this._configuration.value, countUp: true });
+  }
+
+  setCountDown(): void {
+    this._configuration.next({ ...this._configuration.value, countUp: false });
+  }
 }

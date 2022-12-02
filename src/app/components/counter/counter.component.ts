@@ -27,6 +27,8 @@ export class CounterComponent implements OnInit {
   }
 
   startCount(): void {
+    if (this.config?.count) return;
+
     this.cs.startCount();
     this.cs.interval$.subscribe((val) => (this.counter = val));
   }

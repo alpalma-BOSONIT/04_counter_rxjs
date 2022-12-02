@@ -7,10 +7,18 @@ import { CounterControllersComponent } from './components/counter-controllers/co
 import { SetupComponent } from './components/counter-controllers/setup/setup.component';
 import { CountComponent } from './components/counter-controllers/count/count.component';
 import { InputsComponent } from './components/counter-controllers/inputs/inputs.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [AppComponent, CounterComponent, CounterControllersComponent, SetupComponent, CountComponent, InputsComponent],
-  imports: [BrowserModule],
+  declarations: [
+    AppComponent,
+    CounterComponent,
+    CounterControllersComponent,
+    SetupComponent,
+    CountComponent,
+    InputsComponent,
+  ],
+  imports: [BrowserModule, ReactiveFormsModule],
   providers: [],
   bootstrap: [AppComponent],
 })
