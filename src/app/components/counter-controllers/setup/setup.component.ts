@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CounterService } from '../../../services/counter.service';
 
 @Component({
@@ -7,10 +7,11 @@ import { CounterService } from '../../../services/counter.service';
   styleUrls: ['./setup.component.scss'],
 })
 export class SetupComponent {
+  @Output() startCounter: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(private cs: CounterService) {}
 
   startCount(): void {
-    this.cs.startCount();
+    this.startCounter.emit(true);
   }
 
   pauseCount(): void {

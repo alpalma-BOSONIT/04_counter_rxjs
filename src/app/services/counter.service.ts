@@ -63,10 +63,12 @@ export class CounterService {
   }
 
   resetCount(): void {
-    this._configuration.next({
-      ...this._configuration.value,
-      initialValue: this._configuration.value.initialValue,
-    });
+    // this._configuration.next({
+    //   ...this._configuration.value,
+    //   initialValue: this._configuration.value.initialValue,
+    // });
+    // console.log(this._configuration.getValue().initialValue);
+    this._counter = this._configuration.getValue().initialValue;
   }
 
   setSteps(steps: number): void {
