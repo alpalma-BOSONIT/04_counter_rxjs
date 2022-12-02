@@ -16,9 +16,6 @@ import { Config } from '../interfaces/config.interface';
   providedIn: 'root',
 })
 export class CounterService {
-  // Interface for config
-  // BS for setting the config -> modify from external components
-
   private _configuration: BehaviorSubject<Config> = new BehaviorSubject<Config>(
     {
       count: false,
@@ -34,10 +31,7 @@ export class CounterService {
   public interval$: Observable<number> = interval(
     this._configuration.getValue().speed
   )
-    .pipe(
-      tap(() => console.log(this._configuration.getValue().count)),
-      takeWhile(() => this._configuration.getValue().count)
-    )
+    .pipe(takeWhile(() => this._configuration.getValue().count))
     .pipe(
       map(() =>
         this._configuration.getValue().countUp

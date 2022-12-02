@@ -8,6 +8,7 @@ import { CounterService } from '../../../services/counter.service';
 })
 export class SetupComponent {
   @Output() startCounter: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output() resetCounter: EventEmitter<boolean> = new EventEmitter<boolean>();
   constructor(private cs: CounterService) {}
 
   startCount(): void {
@@ -20,5 +21,6 @@ export class SetupComponent {
 
   resetCount(): void {
     this.cs.resetCount();
+    this.resetCounter.emit(true);
   }
 }

@@ -34,4 +34,8 @@ export class CounterComponent implements OnInit {
   pauseCount(): void {
     this.cs.pauseCount(); // Creo que no hace falta desuscribirse porque el takeWhile ya emite un complete.
   }
+  resetCount(): void {
+    console.log(this.config!.initialValue);
+    this.counter = this.config!.initialValue;
+  }
 }
