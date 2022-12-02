@@ -11,6 +11,7 @@ import {
   tap,
 } from 'rxjs';
 import { Config } from '../interfaces/config.interface';
+import { Inputs } from '../interfaces/inputs.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -82,5 +83,9 @@ export class CounterService {
 
   setCountDown(): void {
     this._configuration.next({ ...this._configuration.value, countUp: false });
+  }
+
+  setInputs(newValue: Inputs): void {
+    this._configuration.next({ ...this._configuration.value, ...newValue });
   }
 }

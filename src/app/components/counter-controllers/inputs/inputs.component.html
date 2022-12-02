@@ -1,7 +1,9 @@
 <h3>Set to</h3>
-<input type="text" />
+<form [formGroup]="inputs" (change)="setInputs()">
+  <input type="number" formControlName="initialValue" />
 
-<h3>Step</h3>
-<input type="number" />
+  <h3>Step</h3>
+  <input type="number" formControlName="steps" />
+</form>
 
 <span>config</span>
