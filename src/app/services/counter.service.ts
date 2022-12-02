@@ -58,17 +58,6 @@ export class CounterService {
     this._counter.next(this._configuration.getValue().initialValue);
   }
 
-  setSteps(steps: number): void {
-    this._configuration.next({ ...this._configuration.value, steps: steps });
-  }
-
-  setInitialValue(value: number): void {
-    this._configuration.next({
-      ...this._configuration.value,
-      initialValue: value,
-    });
-  }
-
   setCountUp(): void {
     this._configuration.next({ ...this._configuration.value, countUp: true });
   }
