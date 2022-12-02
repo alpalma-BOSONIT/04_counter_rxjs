@@ -68,6 +68,8 @@ export class CounterService {
 
   setInputs(newValue: Inputs): void {
     this._configuration.next({ ...this._configuration.value, ...newValue });
-    this._counter.next(newValue.initialValue);
+
+    if (!this._configuration.getValue().count)
+      this._counter.next(newValue.initialValue);
   }
 }
