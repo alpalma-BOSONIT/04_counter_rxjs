@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, interval, map, Observable, takeWhile } from 'rxjs';
+import { BehaviorSubject, interval, Observable, takeWhile, tap } from 'rxjs';
 import { Config } from '../interfaces/config.interface';
 import { Inputs } from '../interfaces/inputs.interface';
 
@@ -16,28 +16,36 @@ export class CounterService {
       steps: 1,
     }
   );
+  private _counter: BehaviorSubject<number> = new BehaviorSubject<number>(
+    this._configuration.getValue().initialValue
+  );
 
-  private _counter: number = this._configuration.getValue().initialValue;
-
-  public interval$: Observable<number> = interval(
+  private interval$: Observable<number> = interval(
     this._configuration.getValue().speed
   )
     .pipe(takeWhile(() => this._configuration.getValue().count))
     .pipe(
-      map(() =>
-        this._configuration.getValue().countUp
-          ? (this._counter += this._configuration.getValue().steps)
-          : (this._counter -= this._configuration.getValue().steps)
-      )
-    );
+      tap(() => {
+        let counter = this._counter.getValue();
+
+        if (this._configuration.getValue().countUp) {
+          this._counter.next((counter += this._configuration.getValue().steps));
+        } else {
+          this._counter.next((counter -= this._configuration.getValue().steps));
+        }
+      })
+    ); // TODO: use same pipe for takeWhile and tap operators
 
   public configuration$: Observable<Config> =
     this._configuration.asObservable();
 
-  myInterval() {}
+  public counter$ = this._counter.asObservable();
 
   startCount(): void {
+    if (this._configuration.getValue().count) return;
+
     this._configuration.next({ ...this._configuration.value, count: true });
+    this.interval$.subscribe();
   }
 
   pauseCount(): void {
@@ -48,12 +56,7 @@ export class CounterService {
   }
 
   resetCount(): void {
-    // this._configuration.next({
-    //   ...this._configuration.value,
-    //   initialValue: this._configuration.value.initialValue,
-    // });
-    // console.log(this._configuration.getValue().initialValue);
-    this._counter = this._configuration.getValue().initialValue;
+    this._counter.next(this._configuration.getValue().initialValue);
   }
 
   setSteps(steps: number): void {
@@ -77,5 +80,6 @@ export class CounterService {
 
   setInputs(newValue: Inputs): void {
     this._configuration.next({ ...this._configuration.value, ...newValue });
+    this._counter.next(newValue.initialValue);
   }
 }

@@ -8,10 +8,12 @@ import { CounterService } from '../../services/counter.service';
 })
 export class ConfigViewComponent implements OnInit {
   config = {};
+  counter = {};
 
   constructor(private cs: CounterService) {}
 
   ngOnInit(): void {
     this.cs.configuration$.subscribe((val) => (this.config = val));
+    this.cs.counter$.subscribe((val) => (this.counter = val));
   }
 }

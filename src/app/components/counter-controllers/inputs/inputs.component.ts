@@ -12,25 +12,19 @@ import { Inputs } from '../../../interfaces/inputs.interface';
 export class InputsComponent implements OnInit {
   debouncer: Subject<Inputs> = new Subject<Inputs>();
 
-  initialValue: number = 0;
-  steps: number = 0;
-
   inputs: FormGroup = this.fb.group({
-    initialValue: [this.initialValue],
-    steps: [this.steps],
+    initialValue: [0],
+    steps: [0],
   });
 
   constructor(private fb: FormBuilder, private cs: CounterService) {}
 
   ngOnInit(): void {
     this.cs.configuration$.subscribe(({ initialValue, steps }) => {
-      this.initialValue = initialValue;
-      this.steps = steps;
-    });
-
-    this.inputs.setValue({
-      initialValue: this.initialValue,
-      steps: this.steps,
+      this.inputs.setValue({
+        initialValue: initialValue,
+        steps: steps,
+      });
     });
   }
 
