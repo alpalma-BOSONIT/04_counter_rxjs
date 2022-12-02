@@ -22,19 +22,18 @@ export class CounterService {
 
   private interval$: Observable<number> = interval(
     this._configuration.getValue().speed
-  )
-    .pipe(takeWhile(() => this._configuration.getValue().count))
-    .pipe(
-      tap(() => {
-        let counter = this._counter.getValue();
+  ).pipe(
+    takeWhile(() => this._configuration.getValue().count),
+    tap(() => {
+      let counter = this._counter.getValue();
 
-        if (this._configuration.getValue().countUp) {
-          this._counter.next((counter += this._configuration.getValue().steps));
-        } else {
-          this._counter.next((counter -= this._configuration.getValue().steps));
-        }
-      })
-    ); // TODO: use same pipe for takeWhile and tap operators
+      if (this._configuration.getValue().countUp) {
+        this._counter.next((counter += this._configuration.getValue().steps));
+      } else {
+        this._counter.next((counter -= this._configuration.getValue().steps));
+      }
+    })
+  );
 
   public configuration$: Observable<Config> =
     this._configuration.asObservable();
